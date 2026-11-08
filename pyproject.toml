@@ -1,0 +1,27 @@
+[project]
+name = "tello-gcs"
+version = "0.1.0"
+description = "Ground station para DJI Tello: teleoperação, percepção e (futuramente) mapeamento e voo autônomo"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy>=1.26",
+    "av>=14",
+    "opencv-python-headless>=4.10,<4.13",  # 4.13+ embute SDL2/libavdevice e colide com pygame/PyAV
+    "pygame>=2.6",
+    "ultralytics>=8.3",
+    "torch>=2.5",
+    "hidapi>=0.15.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.uv]
+package = false
+# ultralytics depende de opencv-python (com SDL2/Qt embutidos), que colide com o SDL2 do pygame no macOS.
+# Trocamos pela variante headless.
+override-dependencies = ["opencv-python; sys_platform == 'never'"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
